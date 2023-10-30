@@ -56,7 +56,7 @@ AllWeather <- read.csv("AllWeather.csv")
 
 #options for R session
 options(digits=2)
-
+# check the sources of assets
 ui <- dashboardPage(
     dashboardHeader(title = "Beach Water Quality"),
 
