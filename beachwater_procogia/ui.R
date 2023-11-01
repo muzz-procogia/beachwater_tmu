@@ -1,36 +1,64 @@
 ui <- dashboardPage(
      dashboardHeader(title = "Beach Water Quality"),
 
-
-
      #sidebar tabs
-     dashboardSidebar(collapsed=TRUE,sidebarMenu(id = "tabs",
-                                                 menuItem("Home", tabName = "landing", icon = icon("home")),
-                                                 #menuItem("Toronto", tabName = "torland", icon = icon("circle")),
-                                                 #menuItem("Toronto Data Visualizations", tabName = "tordata", icon = icon("water", class="water1")),
-                                                 #menuItem("Toronto Predictive Models", tabName = "Torpredict", icon = icon("umbrella-beach")),
-                                                 menuItem("Niagara", tabName = "nialand", icon = icon("square")),
-                                                 menuItem("Niagara Data Visualizations", tabName = "niadata", icon = icon("water", class="water2")),
-                                                 menuItem("Niagara Predictive Models", tabName = "Niagarapredicttab", icon = icon("umbrella-beach"))
-                                                 #menuItem("Vancouver", tabName = "vanland", icon = icon("cog")),
-                                                 #menuItem("Vancouver Data Visualizations", tabName = "Vandata", icon = icon("water", class="water3")),
-                                                 #menuItem("Vancouver Predictive Models", tabName = "Vanpredict", icon = icon("umbrella-beach")),
-                                                 #menuItem("Manitoba", tabName = "manland", icon = icon("star")),
-                                                 #menuItem("Manitoba Data Visualizations", tabName = "Mandata", icon = icon("water", class="water4")),
-                                                 #menuItem("Manitoba Predictive Models", tabName = "Manpredict", icon = icon("umbrella-beach"))
+     dashboardSidebar(
+          collapsed=TRUE,
+          sidebarMenu(id = "tabs",
+                      menuItem("Home",
+                               tabName = "landing",
+                               icon = icon("home")),
+                      # menuItem("Toronto",
+                      #          tabName = "torland",
+                      #          icon = icon("circle")),
+                      # menuItem("Toronto Data Visualizations",
+                      #          tabName = "tordata",
+                      #          icon = icon("water",
+                      #          class="water1")),
+                      # menuItem("Toronto Predictive Models",
+                      #          tabName = "Torpredict",
+                      #          icon = icon("umbrella-beach")),
+                      menuItem("Niagara",
+                               tabName = "nialand",
+                               icon = icon("square")),
+                      menuItem("Niagara Data Visualizations",
+                               tabName = "niadata",
+                               icon = icon("water",
+                               class="water2")),
+                      menuItem("Niagara Predictive Models",
+                               tabName = "Niagarapredicttab",
+                               icon = icon("umbrella-beach"))
+                      # menuItem("Vancouver",
+                      #          tabName = "vanland",
+                      #          icon = icon("cog")),
+                      # menuItem("Vancouver Data Visualizations",
+                      #          tabName = "Vandata",
+                      #          icon = icon("water",
+                      #          class="water3")),
+                      # menuItem("Vancouver Predictive Models",
+                      #          tabName = "Vanpredict",
+                      #          icon = icon("umbrella-beach")),
+                      # menuItem("Manitoba",
+                      #          tabName = "manland",
+                      #          icon = icon("star")),
+                      # menuItem("Manitoba Data Visualizations",
+                      #          tabName = "Mandata",
+                      #          icon = icon("water",
+                      #          class="water4")),
+                      # menuItem("Manitoba Predictive Models",
+                      #          tabName = "Manpredict",
+                      #          icon = icon("umbrella-beach"))
      )),
 
      dashboardBody(
-          #tabitems all together
           tabItems(
-
-               ##NEW FORMATTING FOR LANDING PAGE 1
                tabItem(tabName = "landing",
-                       fluidRow(tags$img(src = "beachpic1.png", style = 'position: absolute', height="100%", width="100%")),
-                       # box(actionButton(inputId = "torhome", label = "Toronto"),
-                       #     width = 4, column(4, align="center"), background = "red"),
+                       fluidRow(
+                            tags$img(src = "beachpic1.png", style = 'position: absolute', height="100%", width="100%")),
                        box(actionButton(inputId = "niahome", label = "Niagara"),
                            width = 4, column(4, align="center"), background = "blue"),
+                       # box(actionButton(inputId = "torhome", label = "Toronto"),
+                       #     width = 4, column(4, align="center"), background = "red"),
                        # box(actionButton(inputId = "vanhome", label = "Vancouver"),
                        #     width = 4, column(4, align="center"), background = "lime"),
                        # box(actionButton(inputId = "manhome", label = "Manitoba"),
