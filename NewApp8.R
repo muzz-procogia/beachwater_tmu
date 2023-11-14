@@ -1,6 +1,6 @@
 library(shiny)
 library(bnlearn)
-setwd("/srv/dev-disk-by-uuid-3c29ef29-6ba4-4c7b-935f-a9227e2ccf33/NAS/Shiny/beachwaterCanada")
+#setwd("/srv/dev-disk-by-uuid-3c29ef29-6ba4-4c7b-935f-a9227e2ccf33/NAS/Shiny/beachwaterCanada")
 
 # Load  .net file
 Niagara_Model <- read.net("NiagaraModel.net")
@@ -47,6 +47,7 @@ server <- function(input, output) {
 
     # Define the range of geomean200
     geomean200_range <- c(0, 1)
+    pred_tables <- Niagara_Model[[7]][[4]][,,1 , , , ]
 
     # Perform conditional probability query using cpquery
     prediction <- cpquery(Niagara_Model, event = (geomean200 >= geomean200_range[1] & geomean200 <= geomean200_range[2]), evidence = evidence)

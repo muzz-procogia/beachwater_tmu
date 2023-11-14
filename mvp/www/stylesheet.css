@@ -1,0 +1,21 @@
+/*  submenu icon styling  */
+
+.fa-area-chart:before, .fa-chart-area:before {
+    content: "\f1fe"; /* chart icon */
+    margin-right: 10px;
+}
+
+.fa-table:before {
+    content: "\f0ce"; /*  table icon */
+    margin-right: 10px;
+}
+
+/*  dark mode/light mode  */
+
+[class*=sidebar-dark-] {
+    background-color: #343a40;
+}
+
+[class*=sidebar-light-] {
+    background-color: #fff;
+}
