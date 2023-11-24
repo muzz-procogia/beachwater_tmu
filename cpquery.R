@@ -8,13 +8,13 @@ library(tidyverse)
 
 
 # Load .net file into bayesian network object
-baynet <- read.net("Nov14NiagaraModel.net")
+baynet <- read.net("Nov15NiagaraModel.net")
 
 nodes <- names(baynet) # these are the nodes of the network
 baynet[["geomean200"]] %>% names()
-  baynet[["geomean200"]]$node  # node name, same as the baynet name "Max24UV"
-  baynet[["geomean200"]]$parents # parent nodes: "rain48", "avwspd", "avgwh24"
-  baynet[["geomean200"]]$children # children nodes: "geomean24", "meantemp24", "watertemp"
+  baynet[["geomean200"]]$node  # node name, same as the baynet name "geomean200"
+  baynet[["geomean200"]]$parents # parent nodes: "watertemp", "turbidity", "geomean24", "avgwspd", "waveheight"
+  baynet[["geomean200"]]$children # children nodes: empty character
   baynet[["geomean200"]]$prob
 
 
@@ -24,16 +24,47 @@ cpquery(fitted = baynet,
 
 # these logical values are condition statements:
 cpquery(baynet,
-  event = (Max24UV == "[0,5.98]"), # in the data, this is either TRUE or FALSE,
-  evidence = (avgwspd == "(5.6,11.1]")) # these conditions are either TRUE or FALSE)
+  event = (geomean200 == "true"), # in the data, this is either TRUE or FALSE,
+  evidence = (watertemp == "[0,15]")) # these conditions are either TRUE or FALSE)
 
 # Multiple evidence statements
 cpquery(baynet,
-        event = (Max24UV == "[0,5.98]"), # in the data, this is either TRUE or FALSE,
+        event = (geomean200 == "true"), # in the data, this is either TRUE or FALSE,
         evidence = (avgwspd == "(5.6,11.1]" & rain48 == "[0,2.5]")) # these conditions are either TRUE or FALSE)
 
 
 # and you can get the actual table of numbers like this
 table(cpdist(baynet, "Max24UV", (avgwspd == "(5.6,11.1]")))
 
+### testing a dynamic value for shiny implement
+
+# Function to determine the increment for Max24UV
+determineMax24UVIncrement <- function(value) {
+     if (value >= 0 && value <= 5.98) {
+          return("[0,5.98]")
+     } else if (value > 5.98 && value <= 7.1) {
+          return("(5.98,7.1]")
+     } else if (value > 7.1 && value <= 7.92) {
+          return("(7.1,7.92]")
+     } else if (value > 7.92 && value <= 12) {
+          return("(7.92,12]")
+     } else {
+          return(NA) # or handle out-of-range values as needed
+     }
+}
+
+# Example usage
+uv_dummy <- 2
+max24UV_increment <- determineMax24UVIncrement(uv_dummy)
+
+# Use cpquery with dynamic evidence
+cpquery(baynet,
+       event = (geomean200 == "true"),
+       evidence = (Max24UV == max24UV_increment)
+)
+
+cpquery(baynet,
+        event = (geomean200 == "true"), # in the data, this is either TRUE or FALSE,
+        evidence = (Max24UV == "[0,5.98]") # these conditions are either TRUE or FALSE)
+)
 

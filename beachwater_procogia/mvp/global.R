@@ -8,8 +8,5 @@ library(htmltools)
 library(leaflet)
 library(htmltools)
 library(jsonlite)
-library(shinyjs)
-library(bnlearn)
-library(tidyverse)
 
 source("datasets.R")

@@ -18,7 +18,6 @@ ui <- dashboardPage(
           )
      ),
      dashboardBody(
-          useShinyjs(),
           tags$head(
                tags$link(rel = "stylesheet", type = "text/css", href = "stylesheet.css")
           ),
@@ -81,29 +80,18 @@ ui <- dashboardPage(
                       fluidRow(
                            box(title = "", background = "info", solidHeader = TRUE, width = 6,
                                tags$h3("The probability (between 0-1) of E. coli exceeding the 200CFU/100mL guideline is:"),
-                               textOutput("result_text"),
-                               # Hidden div for displaying fetched data
-                               div(id = "fetchedDataDiv", style = "display: none;",
-                                   tags$h4("Fetched Environmental Data:"),
-                                   textOutput("maxUV24"),
-                                   #textOutput("avgvhwh24"),
-                                   textOutput("avgwspd"),
-                                   textOutput("rain48"),
-                                   textOutput("meantemp24")
-                               )
+                               textOutput("result_text")
                            ),
                            box(width = 6,
-                               tags$h4("Environmental Data:"),
-                               #textOutput("maxUV24"),
-                               #textOutput("avgvhwh24"),
-                               #textOutput("avgwspd"),
-                               #textOutput("rain48"),
-                               #textOutput("meantemp24"),
-                               selectInput(inputId = "WaveHeight", label = "Wave Height", choices = c("0 - 5", "5 - 10", "10 - 60")),
-                               selectInput(inputId = "Geomean24", label = "Yesterday's geomean e. coli", choices = c("1 - 50", "50 - 100", "100 - 200", "200 - 2072.7")),
-                               selectInput(inputId = "WaterTemp", label = "Water Temperature", choices = c("0 - 15", "15 - 23.44", "23.44 - 30")),
+                               selectInput(inputId = "Maxuv", label = "Yesterday's MaxUV", choices = c("0 - 5.98", "5.98 - 7.1", "7.1 - 7.92", "7.92 - 12")),
+                               selectInput(inputId = "BuoyWave", label = "Avgvwh24??", choices = c("0-0.19", "0.19-0.37", "0.37-2")),
+                               selectInput(inputId = "ShoreWave", label = "Wave Height", choices = c("0 - 5", "5 - 10", "10 - 60")),
+                               selectInput(inputId = "Windspeed", label = "Wind speed", choices = c("0 - 3.15", "3.15 - 4.2", "4.2 - 5.6", "5.6 - 11.12")),
+                               selectInput(inputId = "Ecoli", label = "Yesterday's geomena e. coli", choices = c("1 - 50", "50-100", "100-200", "200-2072.7")),
+                               selectInput(inputId = "WaterTemp", label = "Water Temperature", choices = c("0 - 15", "15 - 23.44", "23.44-30")),
                                selectInput(inputId = "Turbidity", label = "Turbidity", choices = c("0 - 5", "5 - 10", "10 - 713")),
-                               bs4Dash::actionButton("fetchDataBtn", "Fetch Data"),
+                               selectInput(inputId = "Rainfall", label = "48hrRainfall", choices = c("0 - 15", "15 - 23.44", "23.44-30")),
+                               selectInput(inputId = "Temp", label = "Yesterdays meantemp", choices = c("0 - 5", "5 - 10", "10 - 713")),
                                actionButton("predictBtn", "Predict")
                            )
                       )
