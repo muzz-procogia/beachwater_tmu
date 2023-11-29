@@ -5,7 +5,10 @@ server <- function(input, output, session) {
 
      # Define reactive values
      values <- reactiveValues(maxUV24 = NULL,
-                              increments = NULL)
+                              avgwspd = NULL,
+                              rain48 = NULL,
+                              meantemp24 = NULL,
+                              predictionResult = NULL)
 
      # Helper Function to fetch and parse data from a JSON URL
      fetchData <- function(url) {
@@ -21,6 +24,23 @@ server <- function(input, output, session) {
           rangeParts <- strsplit(inputString, " - ")[[1]]
           return(as.numeric(rangeParts[1])) # Returns the lower bound of the range
      }
+
+     # Reactive expression to determine the box color
+     boxColour <- reactive({
+          if (!is.null(values$predictionResult) && !is.na(values$predictionResult)) {
+               percentage <- values$predictionResult
+               if (percentage <= 30) {
+                    return("success")
+               } else if (percentage <= 65) {
+                    return("warning")
+               } else {
+                    return("danger")
+               }
+          } else {
+               return("gray-dark")  # Default color when app starts or if predictionResult is not valid
+          }
+     })
+
 
      # Function to determine the increment for Max24UV
      determineMax24UVIncrement <- function(value) {
@@ -104,6 +124,11 @@ server <- function(input, output, session) {
           }
      }
 
+     # Initially hide the fetchedDataBox
+     shinyjs::hide("fetchedDataBox")
+
+     # Initially disable the Predict button
+     shinyjs::disable("predictBtn")
 
      # Observer for the "Fetch Data" button
      observeEvent(input$fetchDataBtn, {
@@ -111,12 +136,16 @@ server <- function(input, output, session) {
           # Fetch data for each metric
 
           maxUV24_value <- fetchData("https://niagarafalls.weatherstats.ca/data/forecast_uv-daily.json?refresh_count=1&browser_zone=Eastern+Standard+Time")
-          # Update reactive values
-          values$maxUV24 <- maxUV24_value
 
           avgwspd_value <- fetchData("https://niagarafalls.weatherstats.ca/data/wind_speed-daily.json?refresh_count=0&browser_zone=Eastern+Standard+Time")
           rain48_value <- fetchData("https://toronto.weatherstats.ca/data/rain-daily.json?refresh_count=0&browser_zone=Eastern+Standard+Time")
           meantemp24_value <- fetchData("https://niagarafalls.weatherstats.ca/data/temperature-daily.json?refresh_count=0&browser_zone=Eastern+Standard+Time")
+
+          # Update reactive values
+          values$maxUV24 <- maxUV24_value
+          values$avgwspd <- avgwspd_value
+          values$rain48 <- rain48_value
+          values$meantemp24 <- meantemp24_value
 
           # Update UI with fetched data
           output$maxUV24 <- renderText({ paste("Max UV24:", maxUV24_value) })
@@ -124,8 +153,98 @@ server <- function(input, output, session) {
           output$rain48 <- renderText({ paste("Rain48:", rain48_value) })
           output$meantemp24 <- renderText({ paste("Meantemp24:", meantemp24_value) })
 
-          # Make the div visible
+          # Set initial values for edit inputs
+          updateNumericInput(session, "maxUV24Input", value = maxUV24_value)
+          updateNumericInput(session, "avgwspdInput", value = avgwspd_value)
+          updateNumericInput(session, "rain48Input", value = rain48_value)
+          updateNumericInput(session, "meantemp24Input", value = meantemp24_value)
+
+          # Make the box and div visible
+          shinyjs::show("fetchedDataBox")
           shinyjs::show("fetchedDataDiv")
+
+          # Enable the Predict button once data is fetched
+          shinyjs::enable("predictBtn")
+     })
+
+     # Toggle edit/display for maxUV24
+     observeEvent(input$editMaxUV24, {
+          shinyjs::toggle("maxUV24Display")
+          shinyjs::toggle("maxUV24Edit")
+          shinyjs::toggle("editMaxUV24")
+          shinyjs::toggle("saveMaxUV24")
+     })
+
+     # Save new value for maxUV24
+     observeEvent(input$saveMaxUV24, {
+          shinyjs::toggle("maxUV24Display")
+          shinyjs::toggle("maxUV24Edit")
+          shinyjs::toggle("editMaxUV24")
+          shinyjs::toggle("saveMaxUV24")
+
+          # Update reactive value
+          values$maxUV24 <- input$maxUV24Input
+          output$maxUV24 <- renderText({ paste("Max UV24:", values$maxUV24) })
+     })
+
+     # Toggle edit/display for avgwspd
+     observeEvent(input$editAvgwspd, {
+          shinyjs::toggle("avgwspdDisplay")
+          shinyjs::toggle("avgwspdEdit")
+          shinyjs::toggle("editAvgwspd")
+          shinyjs::toggle("saveAvgwspd")
+     })
+
+     # Save new value for avgwspd
+     observeEvent(input$saveAvgwspd, {
+          shinyjs::toggle("avgwspdDisplay")
+          shinyjs::toggle("avgwspdEdit")
+          shinyjs::toggle("editAvgwspd")
+          shinyjs::toggle("saveAvgwspd")
+
+          # Update reactive value
+          values$avgwspd <- input$avgwspdInput
+          output$avgwspd <- renderText({ paste("Avgwspd:", values$avgwspd) })
+     })
+
+     # Toggle edit/display for rain48
+     observeEvent(input$editRain48, {
+          shinyjs::toggle("rain48Display")
+          shinyjs::toggle("rain48Edit")
+          shinyjs::toggle("editRain48")
+          shinyjs::toggle("saveRain48")
+     })
+
+     # Save new value for rain48
+     observeEvent(input$saveRain48, {
+          shinyjs::toggle("rain48Display")
+          shinyjs::toggle("rain48Edit")
+          shinyjs::toggle("editRain48")
+          shinyjs::toggle("saveRain48")
+
+          # Update reactive value
+          values$rain48 <- input$rain48Input
+          output$rain48 <- renderText({ paste("Rain48:", values$rain48) })
+     })
+
+     # Toggle edit/display for meantemp24
+     observeEvent(input$editMeantemp24, {
+          shinyjs::toggle("meantemp24Display")
+          shinyjs::toggle("meantemp24Edit")
+          shinyjs::toggle("editMeantemp24")
+          shinyjs::toggle("saveMeantemp24")
+     })
+
+     # Save new value for meantemp24
+     observeEvent(input$saveMeantemp24, {
+          shinyjs::toggle("meantemp24Display")
+          shinyjs::toggle("meantemp24Edit")
+          shinyjs::toggle("editMeantemp24")
+          shinyjs::toggle("saveMeantemp24")
+
+          # Update reactive value
+          values$meantemp24 <- input$meantemp24Input
+          output$meantemp24 <- renderText({ paste("Meantemp24:", values$meantemp24) })
      })
 
      # Process inputs and return increments
@@ -139,11 +258,11 @@ server <- function(input, output, session) {
 
           # Use the reactive value
           maxUV24Value <- values$maxUV24
+          message("maxUV24Increment:", maxUV24Value)
           message("waveHeightIncrement:", waveHeightInput)
           message("geomean24Increment:", geomean24Input)
           message("waterTempIncrement:", waterTempInput)
           message("turbidityIncrement:", turbidityInput)
-          message("maxUV24Increment:", maxUV24Value)
 
           list(
           # Process the inputs through the respective functions
@@ -190,10 +309,32 @@ server <- function(input, output, session) {
 
           predictionResultPercentage <- round(predictionResult * 100, 2)
           message("Result:", predictionResultPercentage)
+          values$predictionResult <- predictionResultPercentage
 
-          # Update the UI with the prediction result
+          #Update the UI with the prediction result
           output$result_text <- renderText({
-               paste0(predictionResultPercentage, " %")
+               if (!is.null(values$predictionResult)) {
+                    paste0(values$predictionResult, " %")
+               } else {
+                    ""  # Default text when app starts or if predictionResult is not available
+               }
           })
+
+
+
      })
+
+     output$resultBox <- renderUI({
+          box(id = "cardNiagaraProb",
+              title = "",
+              background = boxColour(),
+              solidHeader = TRUE,
+              width = 12,
+              collapsible = FALSE,
+              closable = FALSE,
+              tags$h3("The probability (between 0-1) of E. coli exceeding the 200CFU/100mL guideline is:"),
+              textOutput("result_text")
+          )
+     })
+
 }

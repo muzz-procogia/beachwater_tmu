@@ -19,3 +19,36 @@
 [class*=sidebar-light-] {
     background-color: #fff;
 }
+
+#cardHeaderNiagara.bg-info > .card-header {
+    background-color: #0c4e9a !important;
+}
+
+#cardHeaderNiagara.bg-info > .card-body {
+    background-color: #fcdd04 !important;
+    padding: 5px;
+}
+
+#cardNiagaraProb.bg-info > .card-header{
+     background-color: #0c4e9a !important;
+}
+
+#fetchedDataBox.shiny-bound-input > .card-header {
+    background-color: #0c4e9a !important;
+}
+
+#cardNiagaraUserInput.shiny-bound-input > .card-header {
+     background-color: #0c4e9a !important;
+}
+
+.btn-default {
+    background-color: #0c4e9a;
+    border-color: #0c4e9a;
+    color: #fff;
+    border-radius: 5px;
+    margin-right: 15px;
+}
+
+#result_text.shiny-text-output.shiny-bound-output {
+     font-size: xx-large;
+}

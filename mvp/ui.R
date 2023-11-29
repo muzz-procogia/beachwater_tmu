@@ -74,39 +74,86 @@ ui <- dashboardPage(
               ),
               tabItem(tabName = "Niagarapredicttab",
                       fluidRow(
-                           box(title = "Predictions for Niagara Beaches. Enter today's environmental data to create a prediction",
-                               background = "success", solidHeader = TRUE,
-                               width = 12
+                           box(id = "cardHeaderNiagara",
+                               title = paste("Predictions for Niagara Beaches. Enter today's (", format(Sys.Date(), "%B %d, %Y"),") environmental data to create a prediction"),
+                               background = "info",
+                               solidHeader = TRUE,
+                               width = 12,
+                               collapsible = FALSE,
+                               closable = FALSE
                            )
                       ),
                       fluidRow(
-                           box(title = "", background = "info", solidHeader = TRUE, width = 6,
-                               tags$h3("The probability (between 0-1) of E. coli exceeding the 200CFU/100mL guideline is:"),
-                               textOutput("result_text"),
+                          # First column for the result text and fetched data
+                          column(width = 6,
+                               uiOutput("resultBox"),
                                # Hidden div for displaying fetched data
-                               div(id = "fetchedDataDiv", style = "display: none;",
-                                   tags$h4("Fetched Environmental Data:"),
-                                   textOutput("maxUV24"),
-                                   #textOutput("avgvhwh24"),
-                                   textOutput("avgwspd"),
-                                   textOutput("rain48"),
-                                   textOutput("meantemp24")
+                               box(
+                                   id = "fetchedDataBox",
+                                   width = 12,
+                                   collapsible = FALSE,
+                                   closable = FALSE,
+                                   div(id = "fetchedDataDiv", style = "display: none;",
+                                       tags$h4("Fetched Environmental Data:"),
+
+                                       #maxUV
+                                       div(id = "maxUV24Display", textOutput("maxUV24")),
+                                       div(id = "maxUV24Edit",
+                                           style = "display: none;",
+                                           numericInput("maxUV24Input", label = NULL, value = 0)),
+                                       actionButton("editMaxUV24", "Edit", class = "btn-sm"),
+                                       actionButton("saveMaxUV24", "Save", class = "btn-sm", style = "display: none;"),
+
+                                       #avgvhwh24
+                                       # div(id = "avgvhwh24Display", textOutput("avgvhwh24")),
+                                       # div(id = "avgvhwh24Edit",
+                                       #     style = "display: none;",
+                                       #     numericInput("avgvhwh24Input", label = NULL, value = 0)),
+                                       # actionButton("editAvgvhwh24", "Edit", class = "btn-sm"),
+                                       # actionButton("saveAvgvhwh24", "Save", class = "btn-sm", style = "display: none;"),
+
+                                       #avgwspd
+                                       div(id = "avgwspdDisplay", textOutput("avgwspd")),
+                                       div(id = "avgwspdEdit",
+                                           style = "display: none;",
+                                           numericInput("avgwspdInput", label = NULL, value = 0)),
+                                       actionButton("editAvgwspd", "Edit", class = "btn-sm"),
+                                       actionButton("saveAvgwspd", "Save", class = "btn-sm", style = "display: none;"),
+
+
+                                       #rain48
+                                       div(id = "rain48Display", textOutput("rain48")),
+                                       div(id = "rain48Edit",
+                                           style = "display: none;",
+                                           numericInput("rain48Input", label = NULL, value = 0)),
+                                       actionButton("editRain48", "Edit", class = "btn-sm"),
+                                       actionButton("saveRain48", "Save", class = "btn-sm", style = "display: none;"),
+
+                                       #meantemp24
+                                       div(id = "meantemp24Display", textOutput("meantemp24")),
+                                       div(id = "meantemp24Edit",
+                                           style = "display: none;",
+                                           numericInput("meantemp24Input", label = NULL, value = 0)),
+                                       actionButton("editMeantemp24", "Edit", class = "btn-sm"),
+                                       actionButton("saveMeantemp24", "Save", class = "btn-sm", style = "display: none;")
+                                   )
                                )
                            ),
-                           box(width = 6,
-                               tags$h4("Environmental Data:"),
-                               #textOutput("maxUV24"),
-                               #textOutput("avgvhwh24"),
-                               #textOutput("avgwspd"),
-                               #textOutput("rain48"),
-                               #textOutput("meantemp24"),
-                               selectInput(inputId = "WaveHeight", label = "Wave Height", choices = c("0 - 5.00", "5.01 - 10.00", "10.01 - 60")),
-                               selectInput(inputId = "Geomean24", label = "Yesterday's geomean e. coli", choices = c("1 - 50.00", "50.01 - 100.00", "100.01 - 200.00", "200.01 - 2072.7")),
-                               selectInput(inputId = "WaterTemp", label = "Water Temperature", choices = c("0 - 15.00", "15.01 - 23.44", "23.45 - 30")),
-                               selectInput(inputId = "Turbidity", label = "Turbidity", choices = c("0 - 5.00", "5.01 - 10.00", "10.01 - 713")),
-                               bs4Dash::actionButton("fetchDataBtn", "Fetch Data"),
-                               actionButton("predictBtn", "Predict")
-                           )
+                          # Second column for the user inputted data
+                           column(width = 6,
+                                box(id ="cardNiagaraUserInput",
+                                    width = 12,
+                                    collapsible = FALSE,
+                                    closable = FALSE,
+                                    tags$h4("Environmental Data:"),
+                                    selectInput(inputId = "WaveHeight", label = "Wave Height", choices = c("0 - 5.00", "5.01 - 10.00", "10.01 - 60")),
+                                    selectInput(inputId = "Geomean24", label = "Yesterday's geomean e. coli", choices = c("1 - 50.00", "50.01 - 100.00", "100.01 - 200.00", "200.01 - 2072.7")),
+                                    selectInput(inputId = "WaterTemp", label = "Water Temperature", choices = c("0 - 15.00", "15.01 - 23.44", "23.45 - 30")),
+                                    selectInput(inputId = "Turbidity", label = "Turbidity", choices = c("0 - 5.00", "5.01 - 10.00", "10.01 - 713")),
+                                    bs4Dash::actionButton("fetchDataBtn", "Fetch Data"),
+                                    actionButton("predictBtn", "Predict")
+                                )
+                         )
                       )
               )
          ),
