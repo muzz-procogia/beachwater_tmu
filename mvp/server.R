@@ -107,16 +107,12 @@ server <- function(input, output, session) {
 
      # Observer for the "Fetch Data" button
      observeEvent(input$fetchDataBtn, {
-          print("button press")
+          message("automative data button press")
           # Fetch data for each metric
 
           maxUV24_value <- fetchData("https://niagarafalls.weatherstats.ca/data/forecast_uv-daily.json?refresh_count=1&browser_zone=Eastern+Standard+Time")
           # Update reactive values
           values$maxUV24 <- maxUV24_value
-          print(maxUV24_value)
-          print(str(maxUV24_value))
-          print(values$maxUV24)
-          print(str(values$maxUV24))
 
           avgwspd_value <- fetchData("https://niagarafalls.weatherstats.ca/data/wind_speed-daily.json?refresh_count=0&browser_zone=Eastern+Standard+Time")
           rain48_value <- fetchData("https://toronto.weatherstats.ca/data/rain-daily.json?refresh_count=0&browser_zone=Eastern+Standard+Time")
@@ -179,7 +175,7 @@ server <- function(input, output, session) {
                "turbidity == '", increments$turbidityIncrement, "')"
           )
 
-          print(evidenceString)
+          message(evidenceString)
 
           # Construct the cpquery call as a string
           cpqueryString <- paste(

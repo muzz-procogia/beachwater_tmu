@@ -47,6 +47,7 @@ ui <- dashboardPage(
                       actionButton("niadata", "Niagara Data Visualizations"),
                       actionButton("Niagarapredicttab", "Niagara Predictive Models")
               ),
+              # Niagara
               tabItem(tabName = "niadata",
                       fluidRow(
                            box(width = 12,
@@ -99,10 +100,10 @@ ui <- dashboardPage(
                                #textOutput("avgwspd"),
                                #textOutput("rain48"),
                                #textOutput("meantemp24"),
-                               selectInput(inputId = "WaveHeight", label = "Wave Height", choices = c("0 - 5", "6 - 10", "11 - 60")),
-                               selectInput(inputId = "Geomean24", label = "Yesterday's geomean e. coli", choices = c("1 - 50", "51 - 100", "101 - 200", "201 - 2072.7")),
-                               selectInput(inputId = "WaterTemp", label = "Water Temperature", choices = c("0 - 15", "16 - 23.44", "23.45 - 30")),
-                               selectInput(inputId = "Turbidity", label = "Turbidity", choices = c("0 - 5", "6 - 10", "11 - 713")),
+                               selectInput(inputId = "WaveHeight", label = "Wave Height", choices = c("0 - 5.00", "5.01 - 10.00", "10.01 - 60")),
+                               selectInput(inputId = "Geomean24", label = "Yesterday's geomean e. coli", choices = c("1 - 50.00", "50.01 - 100.00", "100.01 - 200.00", "200.01 - 2072.7")),
+                               selectInput(inputId = "WaterTemp", label = "Water Temperature", choices = c("0 - 15.00", "15.01 - 23.44", "23.45 - 30")),
+                               selectInput(inputId = "Turbidity", label = "Turbidity", choices = c("0 - 5.00", "5.01 - 10.00", "10.01 - 713")),
                                bs4Dash::actionButton("fetchDataBtn", "Fetch Data"),
                                actionButton("predictBtn", "Predict")
                            )
