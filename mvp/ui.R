@@ -101,8 +101,8 @@ ui <- dashboardPage(
                                        div(id = "maxUV24Edit",
                                            style = "display: none;",
                                            numericInput("maxUV24Input", label = NULL, value = 0)),
-                                       actionButton("editMaxUV24", "Edit", class = "btn-sm"),
-                                       actionButton("saveMaxUV24", "Save", class = "btn-sm", style = "display: none;"),
+                                       actionButton("editMaxUV24", "Edit UV Index", class = "btn-sm"),
+                                       actionButton("saveMaxUV24", "Save UV Index", class = "btn-sm save-btn", style = "display: none;"),
 
                                        #avgvhwh24
                                        # div(id = "avgvhwh24Display", textOutput("avgvhwh24")),
@@ -117,8 +117,8 @@ ui <- dashboardPage(
                                        div(id = "avgwspdEdit",
                                            style = "display: none;",
                                            numericInput("avgwspdInput", label = NULL, value = 0)),
-                                       actionButton("editAvgwspd", "Edit", class = "btn-sm"),
-                                       actionButton("saveAvgwspd", "Save", class = "btn-sm", style = "display: none;"),
+                                       actionButton("editAvgwspd", "Edit Wind Speed", class = "btn-sm"),
+                                       actionButton("saveAvgwspd", "Save Wind Speed", class = "btn-sm save-btn", style = "display: none;"),
 
 
                                        #rain48
@@ -126,16 +126,16 @@ ui <- dashboardPage(
                                        div(id = "rain48Edit",
                                            style = "display: none;",
                                            numericInput("rain48Input", label = NULL, value = 0)),
-                                       actionButton("editRain48", "Edit", class = "btn-sm"),
-                                       actionButton("saveRain48", "Save", class = "btn-sm", style = "display: none;"),
+                                       actionButton("editRain48", "Edit Rainfall", class = "btn-sm"),
+                                       actionButton("saveRain48", "Save Rainfall", class = "btn-sm save-btn", style = "display: none;"),
 
                                        #meantemp24
                                        div(id = "meantemp24Display", textOutput("meantemp24")),
                                        div(id = "meantemp24Edit",
                                            style = "display: none;",
                                            numericInput("meantemp24Input", label = NULL, value = 0)),
-                                       actionButton("editMeantemp24", "Edit", class = "btn-sm"),
-                                       actionButton("saveMeantemp24", "Save", class = "btn-sm", style = "display: none;")
+                                       actionButton("editMeantemp24", "Edit Temperature", class = "btn-sm"),
+                                       actionButton("saveMeantemp24", "Save Temperature", class = "btn-sm save-btn", style = "display: none;")
                                    )
                                )
                            ),
@@ -148,7 +148,7 @@ ui <- dashboardPage(
                                     tags$h4("Environmental Data:"),
                                     selectInput(inputId = "WaveHeight", label = "Wave Height", choices = c("0 - 5.00", "5.01 - 10.00", "10.01 - 60")),
                                     selectInput(inputId = "Geomean24", label = "Yesterday's geomean e. coli", choices = c("1 - 50.00", "50.01 - 100.00", "100.01 - 200.00", "200.01 - 2072.7")),
-                                    selectInput(inputId = "WaterTemp", label = "Water Temperature", choices = c("0 - 15.00", "15.01 - 23.44", "23.45 - 30")),
+                                    selectInput(inputId = "WaterTemp", label = "Water Temperature (°C)", choices = c("0 - 15.00", "15.01 - 23.44", "23.45 - 30")),
                                     selectInput(inputId = "Turbidity", label = "Turbidity", choices = c("0 - 5.00", "5.01 - 10.00", "10.01 - 713")),
                                     bs4Dash::actionButton("fetchDataBtn", "Fetch Data"),
                                     actionButton("predictBtn", "Predict")

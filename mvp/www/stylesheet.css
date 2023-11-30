@@ -52,3 +52,16 @@
 #result_text.shiny-text-output.shiny-bound-output {
      font-size: xx-large;
 }
+
+.btn-sm {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.save-btn {
+     background-color: green;
+}
+
+.manual-entry-warning {
+    color: red;
+}

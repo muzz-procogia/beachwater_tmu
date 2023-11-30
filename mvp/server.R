@@ -10,11 +10,43 @@ server <- function(input, output, session) {
                               meantemp24 = NULL,
                               predictionResult = NULL)
 
-     # Helper Function to fetch and parse data from a JSON URL
-     fetchData <- function(url) {
+     # Helper Function to fetch and parse maxUV data from a JSON URL
+     fetchDataMaxUV <- function(url) {
           data <- jsonlite::fromJSON(url)
           first_row <- data$rows$c[[1]]
           value <- first_row$v[[2]]
+          return(value)
+     }
+
+     # Helper Function to fetch and parse avgwspd data from a JSON URL
+     fetchDataAvgwspd <- function(url) {
+          data <- jsonlite::fromJSON(url)
+          first_row <- data$rows$c[[1]]
+          value <- first_row$v[[3]]
+          return(value)
+     }
+
+     # Helper Function to fetch and parse rain48 data from a JSON URL
+     fetchDataRain48 <- function(url) {
+          data <- jsonlite::fromJSON(url)
+          first_row <- data$rows$c[[1]]
+          second_row <- data$rows$c[[2]]
+          value <- first_row$v[[2]] + second_row$v[[2]]
+
+          # Check if either of the values is NULL
+          if (is.null(first_row$v[[2]]) || is.null(second_row$v[[2]])) {
+               return("Please manually enter a value")
+          } else {
+               value <- first_row$v[[2]] + second_row$v[[2]]
+               return(value)
+          }
+     }
+
+     # Helper Function to fetch and parse data from a JSON URL
+     fetchDataMeantemp <- function(url) {
+          data <- jsonlite::fromJSON(url)
+          first_row <- data$rows$c[[1]]
+          value <- first_row$v[[3]]
           return(value)
      }
 
@@ -54,6 +86,21 @@ server <- function(input, output, session) {
                return("(7.92,12]")
           } else {
                return(NA) # or handle out-of-range values as needed
+          }
+     }
+
+     # Function to determine the increment for Rainfall
+     determineRain48Increment <- function(value) {
+          if (is.na(value) || !is.numeric(value)) {
+               return(NA)
+          } else if (value >= 0 && value <= 2.5) {
+               return("[0,2.5]")
+          } else if (value > 2.5 && value <= 7.6) {
+               return("(2.5,7.6]")
+          } else if (value > 7.6 && value <= 240) {
+               return("(7.6,240]")
+          } else {
+               return(NA)  # Handle out-of-range values
           }
      }
 
@@ -135,11 +182,13 @@ server <- function(input, output, session) {
           message("automative data button press")
           # Fetch data for each metric
 
-          maxUV24_value <- fetchData("https://niagarafalls.weatherstats.ca/data/forecast_uv-daily.json?refresh_count=1&browser_zone=Eastern+Standard+Time")
+          maxUV24_value <- fetchDataMaxUV("https://niagarafalls.weatherstats.ca/data/forecast_uv-daily.json?refresh_count=1&browser_zone=Eastern+Standard+Time")
 
-          avgwspd_value <- fetchData("https://niagarafalls.weatherstats.ca/data/wind_speed-daily.json?refresh_count=0&browser_zone=Eastern+Standard+Time")
-          rain48_value <- fetchData("https://toronto.weatherstats.ca/data/rain-daily.json?refresh_count=0&browser_zone=Eastern+Standard+Time")
-          meantemp24_value <- fetchData("https://niagarafalls.weatherstats.ca/data/temperature-daily.json?refresh_count=0&browser_zone=Eastern+Standard+Time")
+          # NOTE: NEED TO ADD avgvhwh24
+
+          avgwspd_value <- fetchDataAvgwspd("https://niagarafalls.weatherstats.ca/data/wind_speed-daily.json?refresh_count=0&browser_zone=Eastern+Standard+Time")
+          rain48_value <- fetchDataRain48("https://toronto.weatherstats.ca/data/rain-daily.json?refresh_count=0&browser_zone=Eastern+Standard+Time") # NOTE: THIS IS TORONTO AND NEEDS TO BE CHANGED TO A NIAGARA DATA SOURCE
+          meantemp24_value <- fetchDataMeantemp("https://niagarafalls.weatherstats.ca/data/temperature-daily.json?refresh_count=0&browser_zone=Eastern+Standard+Time")
 
           # Update reactive values
           values$maxUV24 <- maxUV24_value
@@ -148,10 +197,10 @@ server <- function(input, output, session) {
           values$meantemp24 <- meantemp24_value
 
           # Update UI with fetched data
-          output$maxUV24 <- renderText({ paste("Max UV24:", maxUV24_value) })
-          output$avgwspd <- renderText({ paste("Avgwspd:", avgwspd_value) })
-          output$rain48 <- renderText({ paste("Rain48:", rain48_value) })
-          output$meantemp24 <- renderText({ paste("Meantemp24:", meantemp24_value) })
+          output$maxUV24 <- renderText({ paste("Yesterday's UV Index:", maxUV24_value) })
+          output$avgwspd <- renderText({ paste("Average Wind Speed (km/h):", avgwspd_value) })
+          output$rain48 <- renderText({ paste("Rainfall across 48h (mm):", rain48_value) })
+          output$meantemp24 <- renderText({ paste("Average Temperature (°C):", meantemp24_value) })
 
           # Set initial values for edit inputs
           updateNumericInput(session, "maxUV24Input", value = maxUV24_value)
@@ -184,7 +233,7 @@ server <- function(input, output, session) {
 
           # Update reactive value
           values$maxUV24 <- input$maxUV24Input
-          output$maxUV24 <- renderText({ paste("Max UV24:", values$maxUV24) })
+          output$maxUV24 <- renderText({ paste("Yesterday's UV Index:", values$maxUV24) })
      })
 
      # Toggle edit/display for avgwspd
@@ -204,7 +253,7 @@ server <- function(input, output, session) {
 
           # Update reactive value
           values$avgwspd <- input$avgwspdInput
-          output$avgwspd <- renderText({ paste("Avgwspd:", values$avgwspd) })
+          output$avgwspd <- renderText({ paste("Average Wind Speed (km/h):", values$avgwspd) })
      })
 
      # Toggle edit/display for rain48
@@ -224,7 +273,7 @@ server <- function(input, output, session) {
 
           # Update reactive value
           values$rain48 <- input$rain48Input
-          output$rain48 <- renderText({ paste("Rain48:", values$rain48) })
+          output$rain48 <- renderText({ paste("Rainfall across 48h (mm):", values$rain48) })
      })
 
      # Toggle edit/display for meantemp24
@@ -244,7 +293,7 @@ server <- function(input, output, session) {
 
           # Update reactive value
           values$meantemp24 <- input$meantemp24Input
-          output$meantemp24 <- renderText({ paste("Meantemp24:", values$meantemp24) })
+          output$meantemp24 <- renderText({ paste("Average Temperature (°C):", values$meantemp24) })
      })
 
      # Process inputs and return increments
@@ -258,7 +307,9 @@ server <- function(input, output, session) {
 
           # Use the reactive value
           maxUV24Value <- values$maxUV24
+          rain48Value <- values$rain48
           message("maxUV24Increment:", maxUV24Value)
+          message("rain48Increment:", rain48Value)
           message("waveHeightIncrement:", waveHeightInput)
           message("geomean24Increment:", geomean24Input)
           message("waterTempIncrement:", waterTempInput)
@@ -270,7 +321,8 @@ server <- function(input, output, session) {
           geomean24Increment = determineGeomean24Increment(getNumericRange(geomean24Input)),
           waterTempIncrement = determineWaterTempIncrement(getNumericRange(waterTempInput)),
           turbidityIncrement = determineTurbidityIncrement(getNumericRange(turbidityInput)),
-          maxUV24Increment = determineMax24UVIncrement(maxUV24Value)
+          maxUV24Increment = determineMax24UVIncrement(maxUV24Value),
+          rain48Increment = determineRain48Increment(rain48Value)
 
           )
 
@@ -288,6 +340,7 @@ server <- function(input, output, session) {
           # Construct the evidence string
           evidenceString <- paste0(
                "(Max24UV == '", increments$maxUV24Increment, "' & ",
+               "rain48 == '", increments$rain48Increment, "' & ",
                "waveheight == '", increments$waveHeightIncrement, "' & ",
                "geomean24 == '", increments$geomean24Increment, "' & ",
                "watertemp == '", increments$waterTempIncrement, "' & ",
@@ -332,7 +385,7 @@ server <- function(input, output, session) {
               width = 12,
               collapsible = FALSE,
               closable = FALSE,
-              tags$h3("The probability (between 0-1) of E. coli exceeding the 200CFU/100mL guideline is:"),
+              tags$h3("The probability (%) of E. coli exceeding the 200CFU/100mL guideline is:"),
               textOutput("result_text")
           )
      })
