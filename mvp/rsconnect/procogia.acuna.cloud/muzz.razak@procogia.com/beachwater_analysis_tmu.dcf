@@ -1,0 +1,13 @@
+name: beachwater_analysis_tmu
+title: beachwater analysis TMU
+username: muzz.razak@procogia.com
+account: muzz.razak@procogia.com
+server: procogia.acuna.cloud
+hostUrl: https://procogia.acuna.cloud/__api__
+appId: 217
+bundleId: 277271
+url: https://procogia.acuna.cloud:443/content/f2bf6aac-a68d-4368-8af6-4063e1a108cf/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: cpquery.R|Executive Summary - Beachwater Analysis R Shiny App.docx|json parse.R|reprex.R|reprex2.R|test.R|www/beachpic1.png|www/rstudio.png

@@ -13,5 +13,3 @@ library(bnlearn)
 library(tidyverse)
 
 source("datasets.R")
-
-# write install line for bnlearn
