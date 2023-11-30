@@ -11,6 +11,18 @@ ui <- dashboardPage(
                menuItem("Niagara", tabName = "nialand", icon = icon("tint"),
                         menuSubItem("Data Visualizations", tabName = "niadata", icon =icon("chart-area")),
                         menuSubItem("Predictive Models", tabName = "Niagarapredicttab", icon =icon("table"))
+               ),
+               menuItem("Toronto", tabName = "torland", icon = icon("tint"),
+                        menuSubItem("Data Visualizations", tabName = "tordata", icon =icon("chart-area")),
+                        menuSubItem("Predictive Models", tabName = "Torontopredicttab", icon =icon("table"))
+               ),
+               menuItem("Vancouver", tabName = "vanland", icon = icon("tint"),
+                        menuSubItem("Data Visualizations", tabName = "vandata", icon =icon("chart-area")),
+                        menuSubItem("Predictive Models", tabName = "Vancouverpredicttab", icon =icon("table"))
+               ),
+               menuItem("Winnepeg", tabName = "winland", icon = icon("tint"),
+                        menuSubItem("Data Visualizations", tabName = "windata", icon =icon("chart-area")),
+                        menuSubItem("Predictive Models", tabName = "Winnepegpredicttab", icon =icon("table"))
                )
           ),
           div(style = "position: absolute; bottom: 0; width: 95%; overflow-x: hidden;",
@@ -46,6 +58,21 @@ ui <- dashboardPage(
                       h2("Niagara Landing Page"),
                       actionButton("niadata", "Niagara Data Visualizations"),
                       actionButton("Niagarapredicttab", "Niagara Predictive Models")
+              ),
+              tabItem(tabName = "torland",
+                      h2("Niagara Landing Page"),
+                      actionButton("tordata", "Toronto Data Visualizations"),
+                      actionButton("Torontopredicttab", "Toronto Predictive Models")
+              ),
+              tabItem(tabName = "vanland",
+                      h2("Niagara Landing Page"),
+                      actionButton("vandata", "Vancouver Data Visualizations"),
+                      actionButton("Vancouverpredicttab", "Vancouver Predictive Models")
+              ),
+              tabItem(tabName = "winland",
+                      h2("Winnepeg Landing Page"),
+                      actionButton("windata", "Winnepeg Data Visualizations"),
+                      actionButton("Winnepegpredicttab", "Winnepeg Predictive Models")
               ),
               # Niagara
               tabItem(tabName = "niadata",
@@ -154,6 +181,65 @@ ui <- dashboardPage(
                                     actionButton("predictBtn", "Predict")
                                 )
                          )
+                      )
+              ),
+              # Toronto
+              tabItem(tabName = "tordata",
+                      fluidRow(
+                           box(width = 12,
+                               tags$h1("Historical Water Quality and Environmental Data in Toronto"),
+                               tags$h2("Data Visualizations will be here")
+                           )
+                           # Additional content for Toronto Data Visualizations
+                      )
+              ),
+              tabItem(tabName = "Torontopredicttab",
+                      fluidRow(
+                           box(width = 12,
+                               tags$h1("Predictive Models for Toronto Beaches"),
+                               tags$h2("Predictive modelling will be here")
+                           )
+                           # Additional content for Toronto Predictive Models
+                      )
+              ),
+
+              # Vancouver
+              tabItem(tabName = "vandata",
+                      fluidRow(
+                           box(width = 12,
+                               tags$h1("Historical Water Quality and Environmental Data in Vancouver"),
+                               tags$h2("Data Visualizations will be here")
+                           )
+                           # Additional content for Vancouver Data Visualizations
+                      )
+              ),
+              tabItem(tabName = "Vancouverpredicttab",
+                      fluidRow(
+                           box(width = 12,
+                               tags$h1("Predictive Models for Vancouver Beaches"),
+                               tags$h2("Predictive modelling will be here")
+                           )
+                           # Additional content for Vancouver Predictive Models
+                      )
+              ),
+
+              # Winnipeg
+              tabItem(tabName = "windata",
+                      fluidRow(
+                           box(width = 12,
+                               tags$h1("Historical Water Quality and Environmental Data in Winnipeg"),
+                               tags$h2("Data Visualizations will be here")
+                           )
+                           # Additional content for Winnipeg Data Visualizations
+                      )
+              ),
+              tabItem(tabName = "Winnepegpredicttab",
+                      fluidRow(
+                           box(width = 12,
+                               tags$h1("Predictive Models for Winnipeg Beaches"),
+                               tags$h2("Predictive modelling will be here")
+                           )
+                           # Additional content for Winnipeg Predictive Models
                       )
               )
          ),
